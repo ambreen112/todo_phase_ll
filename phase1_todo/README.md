@@ -1,125 +1,177 @@
-# Todo CLI App - Reusable Intelligence Architecture
+# Todo App - Full Stack Task Management
 
-A console-based todo application demonstrating hierarchical agent architecture with reusable skills and subagent development patterns.
+A modern full-stack todo application built with FastAPI (backend) and Next.js (frontend).
 
 ## Features
 
-- **Add Tasks**: Create items with title, description, priority, tags, due dates, and recurrence.
-- **Advanced Metadata**:
-  - **Priority Levels**: HIGH (🔴), MEDIUM (🟡), LOW (🟢).
-  - **Tags/Categories**: Assign multiple labels (e.g., work, home).
-  - **Due Dates**: Set deadlines with overdue (⚠) and today (⏰) indicators.
-  - **Recurring Tasks**: Auto-reschedule (daily, weekly, monthly) with 🔄 indicator.
-- **Search & Filter**: Search by keyword; filter by status, priority, tags, or due date.
-- **Sort**: Reorder by ID, Priority, Title, or Completion Status.
-- **Soft-Delete**: Delete with reasons and restore from "Deleted" list.
-- **Task Management**: Mark as Complete (✅) or Incomplete.
+- **Task Management**: Create, edit, and delete tasks
+- **Priority Levels**: HIGH, MEDIUM, LOW with visual indicators
+- **Due Dates**: Set deadlines with overdue and due-today alerts
+- **Recurring Tasks**: Auto-reschedule (daily, weekly, monthly)
+- **Tags**: Organize tasks with multiple labels
+- **Search & Filter**: Search by keyword; filter by status, priority, tags, or due date
+- **Sort**: Reorder by created date, due date, priority, or title
+- **Soft-Delete**: Delete with reasons and restore from deleted list
+- **Notifications**: Browser notifications for overdue and due-today tasks
+
+## Tech Stack
+
+### Backend
+- **FastAPI**: Modern Python web framework
+- **SQLModel**: Database ORM with SQLAlchemy
+- **SQLite**: Database (easily switchable to PostgreSQL)
+- **UVicorn**: ASGI server
+- **Python-Jose**: JWT authentication
+
+### Frontend
+- **Next.js 14**: React framework with App Router
+- **React**: UI library
+- **Tailwind CSS**: Utility-first CSS framework
+- **TanStack Query**: Data fetching and caching
+- **Axios**: HTTP client
 
 ## Project Structure
 
 ```
-todo-phase1/
-├── src/
-│   ├── agents/          # Agent implementations (Main + Subagents)
-│   │   ├── main_agent.py
-│   │   ├── add_update_agent.py
-│   │   ├── list_search_agent.py
-│   │   └── delete_complete_agent.py
-│   ├── skills/          # Reusable skill modules
-│   │   ├── storage_skill.py
-│   │   ├── id_generator_skill.py
-│   │   └── formatter_skill.py
-│   ├── models/          # Data models (Todo entity)
-│   │   └── todo.py
-│   └── cli/            # CLI entry point
-├── specs/              # Feature specifications (SDD)
-├── history/            # Prompt History Records (PHRs)
-├── .specify/          # Framework templates and configuration
-├── .claude/           # Claude CLI commands
-└── CLAUDE.md          # Project AI instructions
+phase1_todo/
+├── backend/
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── routes/          # API endpoints
+│   │   │   │   ├── auth.py
+│   │   │   │   └── tasks.py
+│   │   │   └── deps.py          # Dependencies
+│   │   ├── core/
+│   │   │   ├── security.py      # JWT handling
+│   │   │   └── config.py        # Settings
+│   │   ├── models/
+│   │   │   ├── schemas.py       # Pydantic schemas
+│   │   │   ├── task.py          # Task model
+│   │   │   └── user.py          # User model
+│   │   └── main.py              # App entry point
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── (auth)/          # Auth pages (login, signup)
+│   │   │   └── (dashboard)/     # Dashboard page
+│   │   ├── components/          # React components
+│   │   │   ├── Button.tsx
+│   │   │   ├── CreateTaskForm.tsx
+│   │   │   ├── EditTaskForm.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── TaskItem.tsx
+│   │   │   └── TaskList.tsx
+│   │   ├── lib/                 # Utilities
+│   │   │   ├── api.ts           # API client
+│   │   │   ├── auth-provider.tsx
+│   │   │   └── notifications.tsx
+│   │   └── types/               # TypeScript types
+│   └── package.json
+└── README.md
 ```
 
-## Architecture
+## Getting Started
 
-### Agent Hierarchy
-- **MainAgent**: Orchestrator for parsing commands and delegation.
-- **AddUpdateAgent**: Manages task creation and editing.
-- **ListSearchAgent**: Handles searching, filtering, and sorting logic.
-- **DeleteCompleteAgent**: Manages status toggles and removals.
+### Prerequisites
 
-### Reusable Skills
-- **StorageSkill**: Central memory for todos with advanced query methods.
-- **FormatterSkill**: Table formatting with visual status/priority indicators.
-- **IDGeneratorSkill**: Persistent incremental ID management.
+- Python 3.12+
+- Node.js 18+
+- npm or yarn
 
----
+### Backend Setup
 
-## Setup Instructions
+1. Navigate to backend directory:
+```bash
+cd backend
+```
 
-### Installation
-1. Clone the repository and navigate to the directory.
-2. Initialize environment:
+2. Create virtual environment:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
-3. Run the application:
+
+3. Install dependencies:
 ```bash
-python3 -m src.cli.todo_app
+pip install -r requirements.txt
 ```
 
----
-
-## Commands
-
-### Adding Tasks
-`add <title> --desc <description> --priority <high/med/low> --tag <tag1,tag2> --due <YYYY-MM-DD> --recur <daily/weekly/monthly>`
-
-### Managing List
-- `list`: Show all active todos.
-- `list --sort <priority/title/status>`: Sort the view.
-- `list --priority high`: Filter by priority.
-- `list --tag work`: Filter by tag.
-- `list --status complete`: Filter by status.
-- `list --due overdue`: Show late tasks.
-
-### Searching
-- `search <keyword>`: Find tasks matching title, description, or tags.
-
-### Updating & Actions
-- `update <id> --priority high --title "New Title"`: Update specific fields.
-- `complete <id>` / `incomplete <id>`: Toggle completion.
-- `stop-recur <id>`: Stop a task from repeating.
-- `remind`: Check for overdue or due today alerts.
-
-### Deletion
-- `delete <id> <reason>`: Soft-delete a task.
-- `list-deleted`: View deleted tasks.
-- `restore <id>`: Bring a deleted task back.
-
----
-
-## Example Usage
-
+4. Start the server:
 ```bash
-Todo> add Buy Milk --priority high --tag grocery
-Added todo: Title 'Buy Milk', Priority: HIGH, Tags: grocery with ID 1
-
-Todo> add Weekly Sync --recur weekly --due 2026-01-01
-Added todo: Title 'Weekly Sync', Due: 2026-01-01, Recurring: weekly with ID 2
-
-Todo> list
-ID  | Pri  | Title                | Tags            | Due          | Status
-------------------------------------------------------------------------------
-1   | 🔴 HI | Buy Milk             | grocery         |              | Incomplete
-2   | 🟡 ME | Weekly Sync          |                 | 2026-01-01   | 🔄 Incomple
+uvicorn src.main:app --reload
 ```
 
----
+Backend runs at: http://localhost:8000
 
-## Development (Spec-Driven)
-This project follows **SDD methodology**:
-1. **Spec** (`specs/`): Requirements.
-2. **Plan**: Architecture decisions.
-3. **Tasks**: Implementation steps.
-4. **PHR** (`history/`): Traceability records.
+### Frontend Setup
+
+1. Navigate to frontend directory:
+```bash
+cd frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start development server:
+```bash
+npm run dev
+```
+
+Frontend runs at: http://localhost:3000
+
+### Environment Variables
+
+#### Backend (.env)
+```
+SECRET_KEY=your-secret-key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+#### Frontend (.env.local)
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_USE_MOCK=false  # Set to true for mock API
+```
+
+## API Endpoints
+
+### Authentication
+- `POST /auth/signup` - Register new user
+- `POST /auth/login` - Login and get JWT token
+
+### Tasks
+- `GET /api/{user_id}/tasks` - List tasks with filters
+- `GET /api/{user_id}/tasks/deleted` - List deleted tasks
+- `GET /api/{user_id}/tasks/{task_id}` - Get single task
+- `POST /api/{user_id}/tasks` - Create task
+- `PUT /api/{user_id}/tasks/{task_id}` - Update task
+- `DELETE /api/{user_id}/tasks/{task_id}` - Soft-delete task
+- `POST /api/{user_id}/tasks/{task_id}/restore` - Restore deleted task
+- `PATCH /api/{user_id}/tasks/{task_id}/complete` - Toggle completion
+
+## Filter Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `completed` | boolean | Filter by completion status |
+| `priority` | string | Filter by priority (HIGH, MEDIUM, LOW) |
+| `tag` | string | Filter by exact tag match |
+| `due_status` | string | Filter by due status (overdue, due_today, future) |
+| `search` | string | Search in title and description |
+| `sort_by` | string | Sort field (created_at, due_date, priority, title) |
+| `sort_order` | string | Sort order (asc, desc) |
+
+## Development
+
+This project follows **Spec-Driven Development (SDD)** methodology:
+
+1. **Specs** (`specs/`): Feature requirements
+2. **Plan**: Architecture decisions
+3. **Tasks**: Implementation steps
+4. **PHR** (`history/prompts/`): Prompt History Records for traceability
+5. **ADR** (`history/adr/`): Architecture Decision Records

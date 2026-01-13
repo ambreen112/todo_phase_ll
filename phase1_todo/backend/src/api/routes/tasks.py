@@ -105,7 +105,7 @@ async def list_tasks(
                 )
             )
         elif due_status == "due_today":
-            tomorrow_start = today_start + datetime.timedelta(days=1)
+            tomorrow_start = today_start + timedelta(days=1)
             query = query.where(
                 and_(
                     Task.due_date.isnot(None),
@@ -115,7 +115,7 @@ async def list_tasks(
                 )
             )
         elif due_status == "future":
-            tomorrow_start = today_start + datetime.timedelta(days=1)
+            tomorrow_start = today_start + timedelta(days=1)
             query = query.where(
                 and_(
                     Task.due_date.isnot(None),
