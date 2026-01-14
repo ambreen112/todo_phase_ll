@@ -87,7 +87,7 @@ export function TaskList({ onEditTask }: TaskListProps) {
     );
   }
 
-  const tasks = showDeleted ? deletedData?.tasks : data?.tasks || [];
+  const tasks = (showDeleted ? deletedData?.tasks : data?.tasks) || [];
 
   return (
     <div>

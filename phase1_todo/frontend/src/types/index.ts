@@ -41,6 +41,7 @@ export interface TaskCreate {
 export interface TaskUpdate {
   title?: string;
   description?: string;
+  completed?: boolean;
   priority?: TaskPriority;
   tags?: string[];
   due_date?: string;

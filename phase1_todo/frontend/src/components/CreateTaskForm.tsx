@@ -53,11 +53,11 @@ export function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
   const resetForm = () => {
     setTitle("");
     setDescription("");
-    setPriority("MEDIUM");
+    setPriority("medium");
     setTags("");
     setDueDate("");
     setDueTime("");
-    setRecurrence("NONE");
+    setRecurrence("none");
     setError("");
   };
 
