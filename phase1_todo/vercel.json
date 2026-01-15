@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend && npm run build",
+  "installCommand": "npm install && pip install -r requirements.txt",
+  "framework": "nextjs",
+  "env": {
+    "DATABASE_URL": {
+      "description": "PostgreSQL database connection string"
+    },
+    "FRONTEND_URL": {
+      "description": "Frontend URL (e.g., https://yourdomain.vercel.app)"
+    },
+    "SECRET_KEY": {
+      "description": "JWT secret key for authentication"
+    }
+  },
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.12"
+    }
+  },
+  "regions": ["iad1"],
+  "public": true
+}

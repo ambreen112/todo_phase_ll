@@ -4,28 +4,29 @@ A modern full-stack todo application built with FastAPI (backend) and Next.js (f
 
 ## Features
 
-- **Task Management**: Create, edit, and delete tasks
+- **Task Management**: Create, edit, complete, delete, and restore tasks
 - **Priority Levels**: HIGH, MEDIUM, LOW with visual indicators
 - **Due Dates**: Set deadlines with overdue and due-today alerts
-- **Recurring Tasks**: Auto-reschedule (daily, weekly, monthly)
+- **Recurring Tasks**: Recurrence fields + next-instance behavior on task completion
 - **Tags**: Organize tasks with multiple labels
 - **Search & Filter**: Search by keyword; filter by status, priority, tags, or due date
 - **Sort**: Reorder by created date, due date, priority, or title
 - **Soft-Delete**: Delete with reasons and restore from deleted list
-- **Notifications**: Browser notifications for overdue and due-today tasks
+- **Notifications**: In-app + browser notifications for overdue and due-today tasks
 
 ## Tech Stack
 
 ### Backend
 - **FastAPI**: Modern Python web framework
 - **SQLModel**: Database ORM with SQLAlchemy
-- **SQLite**: Database (easily switchable to PostgreSQL)
-- **UVicorn**: ASGI server
-- **Python-Jose**: JWT authentication
+- **PostgreSQL (Neon)**: Primary database (configured via `DATABASE_URL`)
+- **Alembic**: Database migrations
+- **Uvicorn**: ASGI server
+- **python-jose**: JWT authentication
 
 ### Frontend
-- **Next.js 14**: React framework with App Router
-- **React**: UI library
+- **Next.js 16**: React framework (App Router)
+- **React 19**: UI library
 - **Tailwind CSS**: Utility-first CSS framework
 - **TanStack Query**: Data fetching and caching
 - **Axios**: HTTP client
@@ -165,6 +166,15 @@ NEXT_PUBLIC_USE_MOCK=false  # Set to true for mock API
 | `search` | string | Search in title and description |
 | `sort_by` | string | Sort field (created_at, due_date, priority, title) |
 | `sort_order` | string | Sort order (asc, desc) |
+
+## Agent Documentation
+
+The Phase 2 Todo Agent is a web-based assistant that helps users manage tasks through a stateless, tool-driven interface. See:
+
+- **Constitution**: `specs/agents/todo-agent.md` — Agent behavior rules, security invariants, non-goals
+- **Tools**: `specs/agents/tools.md` — Tool definitions (create, list, get, update, toggle, delete, restore) and hard usage rules
+- **Planning**: `specs/agents/planning.md` — Execution flow (intent → validate → tool → respond) and multi-step patterns
+- **Tasks**: `specs/agents/tasks.md` — Implementation task breakdown for agent spec completion
 
 ## Development
 
