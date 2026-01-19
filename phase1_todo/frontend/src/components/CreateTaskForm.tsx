@@ -77,12 +77,18 @@ export function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
       .filter((t) => t.length > 0);
 
     // Build due_date from date and time inputs
+    // Use Date constructor with individual components to ensure local timezone interpretation
     let dueDateTime: string | undefined;
     if (dueDate) {
+      const [year, month, day] = dueDate.split('-').map(Number);
       if (dueTime) {
-        dueDateTime = `${dueDate}T${dueTime}:00Z`;
+        const [hours, minutes] = dueTime.split(':').map(Number);
+        // Create date using local timezone (month is 0-indexed)
+        const localDate = new Date(year, month - 1, day, hours, minutes, 0);
+        dueDateTime = localDate.toISOString();
       } else {
-        dueDateTime = `${dueDate}T00:00:00Z`;
+        const localDate = new Date(year, month - 1, day, 0, 0, 0);
+        dueDateTime = localDate.toISOString();
       }
     }
 

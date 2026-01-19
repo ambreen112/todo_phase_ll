@@ -30,12 +30,18 @@ export function EditTaskForm({ task, onSuccess, onCancel }: EditTaskFormProps) {
   const [recurrence, setRecurrence] = useState<TaskRecurrence>(task.recurrence as TaskRecurrence);
   const [error, setError] = useState("");
 
-  // Parse due_date on mount
+  // Parse due_date on mount - convert to local timezone for display
   useEffect(() => {
     if (task.due_date) {
       const date = new Date(task.due_date);
-      setDueDate(date.toISOString().split("T")[0]);
-      setDueTime(date.toISOString().split("T")[1].substring(0, 5));
+      // Use local date/time methods instead of toISOString() which returns UTC
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      setDueDate(`${year}-${month}-${day}`);
+      setDueTime(`${hours}:${minutes}`);
     }
   }, [task.due_date]);
 
@@ -76,12 +82,18 @@ export function EditTaskForm({ task, onSuccess, onCancel }: EditTaskFormProps) {
       .filter((t) => t.length > 0);
 
     // Build due_date from date and time inputs
+    // Use Date constructor with individual components to ensure local timezone interpretation
     let dueDateTime: string | undefined;
     if (dueDate) {
+      const [year, month, day] = dueDate.split('-').map(Number);
       if (dueTime) {
-        dueDateTime = `${dueDate}T${dueTime}:00Z`;
+        const [hours, minutes] = dueTime.split(':').map(Number);
+        // Create date using local timezone (month is 0-indexed)
+        const localDate = new Date(year, month - 1, day, hours, minutes, 0);
+        dueDateTime = localDate.toISOString();
       } else {
-        dueDateTime = `${dueDate}T00:00:00Z`;
+        const localDate = new Date(year, month - 1, day, 0, 0, 0);
+        dueDateTime = localDate.toISOString();
       }
     }
 
